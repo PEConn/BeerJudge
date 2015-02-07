@@ -9,6 +9,18 @@ def getRestaurantId(latLong,apiID=backupApiID):
     venues = venue_client.search(location=latLong, radius=10, category=['restaurant'], has_menu=True)
     return venues.get('objects',{'id':''})[0].get('id','')
 
+def getRestaurantIDs(latLong,apiID=backupApiID):
+    venue_client = locu.VenueApiClient(apiID)
+    venues = venue_client.search(location=latLong, radius=150, category=['restaurant'], has_menu=True)
+    venues = [v for v in venues.get('objects')]
+    venuesLite = []
+    for venue in venues:
+        venuesLite.append({})
+        for k,v in venue.iteritems():
+            if k in ['name','id']:
+                venuesLite[-1][k] = v
+    return venuesLite
+
 def getMenuList(id,apiID=backupApiID):
     venue_client = locu.VenueApiClient(apiID)
     menuList = venue_client.get_menus(id)
@@ -80,10 +92,11 @@ def printMenu(menuList):
                         print '\t\t',item['name']
                         print '\t\t\t',item.get('description','No Description')
 
-
-# Example Usage
-# id = getRestaurantId((51.5152855607142, -0.111821715082156))
-# menuList = getMenuList(id)
-# printMenu(menuList)
-
-
+#
+# # Example Usage
+# id = getRestaurantIDs((51.5152855607142, -0.111821715082156))
+# # menuList = getMenuList(id)
+# # printMenu(menuList)
+# print len(id)
+# for i in id:
+#     print id

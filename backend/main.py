@@ -5,6 +5,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
              abort, render_template, flash
 from contextlib import closing
 from flask_bootstrap import Bootstrap
+from menuParsing.menuParsing import *
 
 
 # configuration
@@ -28,7 +29,7 @@ def init_db():
         db.commit()
 
 def get_db():
-    if not hasttr(g, 'sqlite_db'):
+    if not hasattr(g, 'sqlite_db'):
         g.sqlite_db = connect_db()
     return g.sqlite_db
 
@@ -59,10 +60,6 @@ def beerSearch(searchString):
     beers = db.getBeerDetails(searchString)
     print beers
     return beers
-
-@app.route("/restaurantMap")
-def restaurantMap():
-    return render_template('restaurantMap.html')
 
 if __name__ == "__main__":
     init_db()
