@@ -1,2 +1,2 @@
 # BeerJudge
-Project for the Beer Garden Hackathon
+Project for the Beer Garage Hackathon
