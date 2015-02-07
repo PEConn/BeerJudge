@@ -1,9 +1,10 @@
 <ion-view view-title="be-er judge">
     <ion-content scroll="false">
       <div class="mapWrap"  data-tap-disabled="true">
-        <map center="43.07493,-89.381388" zoom="15"> 
-          <marker ng-repeat=" pos in positions" position="{{pos.lat}},{{pos.lng}}"></marker>
+        <map center="43.07493,-89.381388" zoom="15" disableDefaultUI="true"> 
+          <marker ng-repeat="pos in positions" position="{{pos.lat}},{{pos.lng}}"></marker>
         </map> 
+        <button class="button button-calm" ng-click="centerOnMe()">Refresh location</button>
       </div>
     </ion-content>
 </ion-view>
