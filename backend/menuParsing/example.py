@@ -11,6 +11,7 @@ cities = ["Bath ", ]#"Birmingham ", "Bradford ", "Brighton & Hove ", "Bristol ",
           # "Worcester ", "York ", "Scottish Cities", "Aberdeen", "Dundee", "Edinburgh", "Glasgow", "Inverness", "Perth",
           # "Stirling", "Welsh Cities", "Bangor ", "Cardiff", "Newport ", "St Asaph", "St David's ", "Swansea", "Northern Irish Cities",
           # "Armagh", "Belfast", "Londonderry", "Lisburn", "Newry"]
+venue_client = locu.VenueApiClient('e0e00a4a7de6654e343c1a281c51da129085f6ab')
 
 ids = {'Zizzi':'129efe440a449cc1cf2c','Nandos':'88a9b45c27ca0853513f'}
 for city in cities:
