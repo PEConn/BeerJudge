@@ -32,10 +32,16 @@ def wc(str, dict):
 
 ################################
 dict = {}
+f = open("../backend/menuParsing/200Menus.txt", 'r')
+for line in f:
+    wc(line,dict)
+f.close()
+#sorted(dict.values())
 
-#str = "1 chicken wing"
-#out = stem(str)
-#print(len(out))
+#print(dict["chicken"])
+#print(dict["potato"])
+#print(dict["kale"])
+
 
 
 
