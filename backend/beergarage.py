@@ -18,16 +18,16 @@ class ABInBev:
             ret = doReq()
         return ret
 
-    def getBeerDetails(self, name, zone='NAZ', limit=50):
+    def getBeerDetails(self, name, zone='EUR', limit=50):
         doReq = lambda: requests.get('https://api.foodily.com/v1/beerLookup',
                             params={'name': name, 'zone': zone, 'limit': limit},
                             headers=self.authHeader)
 
         return self.request(doReq).text
 
-    def getBeerDetailsAsDict(self, name):
+    def getBeerDetailsAsDict(self, name, zone='EUR'):
         doReq = lambda: requests.get('https://api.foodily.com/v1/beerLookup',
-                            params={'name': name, 'zone': zone, 'limit': limit},
+						params={'name': name, 'zone': zone},
                             headers=self.authHeader)
 
         return self.request(doReq).json()
