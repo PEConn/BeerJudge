@@ -102,7 +102,8 @@ def choose_restaurant():
     foodItems = getFoodItems(menuList,v=True)
     # print printMenu(menuList)
     # Call Michelle's Code
-    return json.dumps(foodItems)
+    # return json.dumps(foodItems)
+    return render_template('beerDetails.html')
 
 if __name__ == "__main__":
     init_db()
