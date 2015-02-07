@@ -6,6 +6,10 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
+import sys
+path = sys.path.append("../backend/")
+import beergarage
+from beergarage import ABInBev
 
 ########## Functions ###########
 def unique_list(l):
@@ -64,6 +68,7 @@ def score(food, beer):
     return out[0][0]
 
 ################################
+ab = ABInBev()
 
 # Initialising and declaring stuff
 Flavour = {'green_hoppy' : 1, 'roasted_toasted' : 2, 'citrus_zesty' : 3, 'sour' : 4, 'spicy' : 5, 'fruity' : 6, 'toffee_caramel' : 7}
@@ -79,15 +84,17 @@ info = ("kimchi fried rice", "Fried kimchi (pickled chinese cabbage) & pork w/ s
 name = info[0]
 str = name + info[1]
 foodQuery = keywords(str, 3)
-beerQuery = ""
+beerQuery = "budweiser"
 
-# Send query, score
-
-# receive results
+beerDetails = ab.getBeerDetails(beerQuery)
+print(beerDetails)
+foodDetails = ab.getIdealFlavourForFood(foodQuery)
+foodCons = foodDetails[0]
+foodAccs = foodDetails[1]
 
 # Dictionary of flavour to cardinality retrieved
-foodCons = {'green_hoppy' : 46, 'toffee_caramel' : 2}
-foodAccs = {'roasted_toasted' : 2}
+#foodCons = {'green_hoppy' : 46, 'toffee_caramel' : 2}
+#foodAccs = {'roasted_toasted' : 2}
 beer_d = {'sour' : 1, 'fruity' : 2, 'spicy' : 1}
 food = getFoodVec(foodCons, foodAccs)
 beer = getBeerVec(beer_d)
