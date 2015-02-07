@@ -73,14 +73,16 @@ def getRestaurants():
     else:
         return json.dumps({'results':None})
 
+
+
 @app.route("/choose_restaurant",methods=['GET'])
 # example http://0.0.0.0:5000/choose_restaurant?id=0a868cf34ddf1f0acbbc
 def choose_restaurant():
     id = request.args.get('id')
     menuList = getMenuList(id)
-    beerItems = getBeerItems(menuList)
-    foodItems = getFoodItems(menuList)
-    print printMenu(menuList)
+    beerItems = getBeerItems(menuList,v=True)
+    foodItems = getFoodItems(menuList,v=True)
+    # print printMenu(menuList)
     # Call Michelle's Code
     return json.dumps(foodItems)
 
