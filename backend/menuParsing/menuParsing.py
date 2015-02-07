@@ -9,9 +9,9 @@ def getRestaurantId(latLong,apiID=backupApiID):
     venues = venue_client.search(location=latLong, radius=10, category=['restaurant'], has_menu=True)
     return venues.get('objects',{'id':''})[0].get('id','')
 
-def getRestaurantIDs(latLong,apiID=backupApiID):
+def getRestaurantIDs(latLong,rad=150,apiID=backupApiID):
     venue_client = locu.VenueApiClient(apiID)
-    venues = venue_client.search(location=latLong, radius=150, category=['restaurant'], has_menu=True)
+    venues = venue_client.search(location=latLong, radius=rad, category=['restaurant'], has_menu=True)
     venues = [v for v in venues.get('objects')]
     venuesLite = []
     for venue in venues:
