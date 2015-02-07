@@ -46,7 +46,7 @@
         });
         
         function searchBeers(lat, lon){
-            $.get("get_restaurants?lat="+lat+"?long="+lon, function(data){
+            $.get("get_restaurants?lat="+lat+"&long="+lon, function(data){
                   $('#searchButton').button('reset');
                   json = JSON.parse(data);
                   console.log(json);
