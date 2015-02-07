@@ -16,9 +16,12 @@
                 </div>
             </div>
         </div>
+        <div class="row" id="resultContainer">
+        
+        </div>
     </div>
     {% block scripts %}
-    {{super()}}
+    {{ super() }} 
     <script>
         $(document).ready(function(){    
             $('#searchButton').click( function() {
@@ -31,7 +34,10 @@
                 $('#searchButton').button('reset');
                 json = JSON.parse(data);
                 console.log(json);
-                $('#resultContainer').append(json);
+                for(i =0; i < json.beers.length; i++){
+                    console.log("adding "+ json.beers[i].name);
+                    $('#resultContainer').append("<div class='col-xs-6 col-md-3'><a href='#' class='thumbnail'><img src='"+json.beers[i].imageUrl+"' ></a></div>");
+                }
             });
         }
     </script>
