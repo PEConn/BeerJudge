@@ -3,7 +3,10 @@
 {% import "bootstrap/fixes.html" as fixes %}
 
 {% block title %}BE-ER DICK{% endblock %}
-
+{% block head %}
+{{ super() }}
+<style>#map-container { height:600px }</style>
+{% endblock %}
 {% block navbar %}
     <nav role="navigation" class="navbar navbar-inverse">
         <div class="navbar-header">
@@ -19,17 +22,7 @@
             <ul class="nav navbar-nav">
                 <li class="/"><a href="#">Home</a></li>
                 <li><a href="beerDetails">Beer Details</a></li>
-                <li><a href="#">"Michelle Smarts"</a></li>
-                <li class="dropdown">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Messages <b class="caret"></b></a>
-                    <ul role="menu" class="dropdown-menu">
-                        <li><a href="#">Inbox</a></li>
-                        <li><a href="#">Drafts</a></li>
-                        <li><a href="#">Sent Items</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Trash</a></li>
-                    </ul>
-                </li>
+                <li><a href="restaurantMap">Restaurant Map</a></li>
             </ul>
             <form role="search" class="navbar-form navbar-left">
                 <div class="form-group">
