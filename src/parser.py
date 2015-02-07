@@ -19,6 +19,7 @@ def topn(n, list):
     else:
         return list[0:n]
 
+# This function takes a string and extracts the keywords
 def keywords(str, n):
     # Tokenise and clean string, remove duplicates
     str = str.lower()
@@ -77,7 +78,6 @@ tokeniser = RegexpTokenizer(r'\w+')
 info = ("kimchi fried rice", "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu")
 name = info[0]
 str = name + info[1]
-#testString = "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu"
 foodQuery = keywords(str, 3)
 beerQuery = ""
 
