@@ -74,6 +74,7 @@ def getRestaurants():
         return json.dumps({'results':None})
 
 @app.route("/choose_restaurant",methods=['GET'])
+# example http://0.0.0.0:5000/choose_restaurant?id=0a868cf34ddf1f0acbbc
 def choose_restaurant():
     id = request.args.get('id')
     menuList = getMenuList(id)
