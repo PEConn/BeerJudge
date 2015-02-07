@@ -27,7 +27,6 @@
                           
 
                 document.var_map = new google.maps.Map(document.getElementById("map-container"), var_mapoptions);
-                var_marker.setMap(document.var_map);
             }
             
             $('#searchButton').click( function() {
@@ -54,11 +53,12 @@
                   
                   for(i=0;i < json.length; i++){
                      var_marker = new google.maps.Marker({
-                        position: new google.maps.LatLng(json[i].lat, json[i].long);
+                        position: new google.maps.LatLng(json[i].lat, json[i].long),
                         map: document.var_map,
                         title:json[i].name});
                   
-                     var_market.setMap(document.var_map);
+                     var_marker.setMap(document.var_map);
+                     console.log ("marker going down");
                   }
             });
         }
