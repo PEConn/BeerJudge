@@ -82,8 +82,7 @@ beerMatches = (['beverages','drinks','beer'],['beer'])
 def getBeerItems(menulist,v=False,descriptions=False):
     # Returns a list of beer items in the format [(name0,description0),(name1,description1)]
     r = getItems(menulist, matchStrings=beerMatches, v=v)
-    if not descriptions:
-        r = [i[0] for i in r]
+    r = [i[0] for i in r]
     return r
 
 def getMenuItems(id):
