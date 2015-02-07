@@ -17,7 +17,8 @@ def getRestaurantIDs(latLong,apiID=backupApiID):
     for venue in venues:
         venuesLite.append({})
         for k,v in venue.iteritems():
-            if k in ['name','id']:
+            print k
+            if k in ['name','id','lat','long']:
                 venuesLite[-1][k] = v
     return venuesLite
 
@@ -75,15 +76,14 @@ nonFoodIgnores = ['beer','wine','drink','beverage']
 
 def getFoodItems(menulist,v=False):
     # Returns a list of food items in the format [(name0,descriptio0n),(name1,description1)]
-    return getItems(menulist,ignoreStrings=nonFoodIgnores,v=v)
+    return getItems(menulist, ignoreStrings=nonFoodIgnores, v=v)
 
 beerMatches = (['beverages','drinks','beer'],['beer'])
 
 def getBeerItems(menulist,v=False,descriptions=False):
-    # Returns a list of beer items in the format [(name0,descriptio0n),(name1,description1)]
-    r = getItems(menulist,matchStrings=beerMatches,v=v)
-    if not descriptions:
-        r = [i[0] for i in r]
+    # Returns a list of beer items in the format [(name0,description0),(name1,description1)]
+    r = getItems(menulist, matchStrings=beerMatches, v=v)
+    r = [i[0] for i in r]
     return r
 
 def getMenuItems(id):
