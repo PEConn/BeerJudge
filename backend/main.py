@@ -73,6 +73,16 @@ def getRestaurants():
     else:
         return json.dumps({'results':None})
 
+@app.route("/choose_restaurant",methods=['GET'])
+def choose_restaurant():
+    id = request.args.get('id')
+    menuList = getMenuList(id)
+    beerItems = getBeerItems(menuList)
+    foodItems = getFoodItems(menuList)
+    print printMenu(menuList)
+    # Call Michelle's Code
+    return json.dumps(foodItems)
+
 if __name__ == "__main__":
     init_db()
     app.run(host='0.0.0.0',debug=True)
