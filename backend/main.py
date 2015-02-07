@@ -69,9 +69,23 @@ def restaurantMap():
 def getRestaurants():
     lat = request.args.get('lat')
     long = request.args.get('long')
+    try:
+        rad = request.args.get('radius')
+    except:
+        pass
+    # print lat,long
+    # print
+    if rad:
+        ids = getRestaurantIDs((lat,long),rad)
+    else:
+        ids = getRestaurantIDs((lat,long))
+
     print lat,long
-    print
-    ids = getRestaurantIDs((lat,long))
+    if rad:
+        print rad
+    print ids
+    for i in ids:
+        print i['lat'],i['long']
     if ids:
         return json.dumps(ids)
     else:
@@ -88,7 +102,8 @@ def choose_restaurant():
     foodItems = getFoodItems(menuList,v=True)
     # print printMenu(menuList)
     # Call Michelle's Code
-    return json.dumps(foodItems)
+    # return json.dumps(foodItems)
+    return render_template('beerDetails.html')
 
 if __name__ == "__main__":
     init_db()
