@@ -1,7 +1,6 @@
 __author__ = 'michelleyeo'
 from flask import Flask
 import nltk
-import math
 try:
    import cPickle as pickle
 except:
@@ -30,17 +29,25 @@ def wc(str, dict):
         else:
             dict[word] += 1
 
+def init():
+    global d
+    d = {}
+    f = open("../backend/menuParsing/manyMenu.txt", 'r')
+    for line in f:
+        wc(line,d)
+    f.close()
+
 ################################
-dict = {}
-f = open("../backend/menuParsing/200Menus.txt", 'r')
-for line in f:
-    wc(line,dict)
-f.close()
+#dict = {}
+#f = open("../backend/menuParsing/manyMenu.txt", 'r')
+#for line in f:
+#    wc(line,dict)
+#f.close()
 #sorted(dict.values())
 
 #print(dict["chicken"])
 #print(dict["potato"])
-#print(dict["kale"])
+
 
 
 
