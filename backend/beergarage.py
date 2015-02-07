@@ -25,6 +25,13 @@ class ABInBev:
 
         return self.request(doReq).text
 
+    def getBeerDetailsAsDict(self, name):
+        doReq = lambda: requests.get('https://api.foodily.com/v1/beerLookup',
+                            params={'name': name, 'zone': zone, 'limit': limit},
+                            headers=self.authHeader)
+
+        return self.request(doReq).json()
+
     def getIdealFlavourForFood(self, name):
         doReq = lambda: requests.get('https://api.foodily.com/v1/beerPairings',
                                      params={'q': name}, headers=self.authHeader)
