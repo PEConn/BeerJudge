@@ -1,4 +1,6 @@
 import sqlite3
+import json
+from beergarage import ABInBev
 from flask import Flask, request, session, g, redirect, url_for, \
              abort, render_template, flash
 from contextlib import closing
@@ -47,6 +49,17 @@ def hello():
     ## entries = cur.fetchall()
     return render_template('index.html')
 
+@app.route("/beerDetails")
+def beerDetails():
+    return render_template('beerDetails.html')
+
+@app.route("/beerDetails/<searchString>")
+def beerSearch(searchString):
+    db = ABInBev()
+    beers = db.getBeerDetails(searchString)
+    print beers
+    return beers
+
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True)
+    app.run(host='0.0.0.0',debug=True)
