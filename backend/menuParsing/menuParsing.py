@@ -48,7 +48,7 @@ def getItems(menuList,ignoreStrings=['----'],matchStrings=[''],v=False):
                         if v:
                             print '\t\t',item['name']
                             print '\t\t\t',item.get('description','No Description')
-                        items.append((item['name'],item.get('description','N/A')))
+                        items.append((item['name'],item.get('description','')))
     return items
 
 def getFoodItems(menulist,v=False):
