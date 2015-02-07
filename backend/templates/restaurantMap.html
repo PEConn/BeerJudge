@@ -10,6 +10,22 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&amp;times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div id="modal-bodyy" class="modal-body">
+                    <h3>Modal Body</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     {% block scripts %}
     {{ super() }}
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
@@ -51,14 +67,32 @@
                   json = JSON.parse(data);
                   console.log(json);
                   
-                  for(i=0;i < json.length; i++){
-                     var_marker = new google.maps.Marker({
-                        position: new google.maps.LatLng(json[i].lat, json[i].long),
-                        map: document.var_map,
-                        title:json[i].name});
+                  for(i=0; i<json.length; i++){
+                     marker = new google.maps.Marker({
+                          position: new google.maps.LatLng(json[i].lat, json[i].long),
+                          map: document.var_map,
+                          identifer:json[i].id,
+                          title:json[i].name});
                   
-                     var_marker.setMap(document.var_map);
-                     console.log ("marker going down");
+                  
+                      google.maps.event.addListener(marker, 'click', function() {
+                          console.log(this.title);
+                          console.log(this.identifer);
+                                                    
+                          $('#myModalLabel').html(this.title);
+                          $.get("choose_restaurant?id="+this.identifer, function(data){
+                                json = JSON.parse(data);
+                                console.log(json);
+                           
+                                
+                                $('#modal-bodyy').html(json);
+                                
+                                $('#basicModal').modal();
+                          });
+                      });
+                  
+                      marker.setMap(document.var_map)
+                      console.log ("marker going down");
                   }
             });
         }
