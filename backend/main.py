@@ -61,8 +61,8 @@ def beerSearch(searchString):
     return beers
 
 @app.route("/get_restaurants", methods=['GET','POST'])
+# example http://0.0.0.0:5000/get_restaurants?lat=51.5152855607142&long=-0.111821715082156
 def getRestaurants():
-
     lat = request.args.get('lat')
     long = request.args.get('long')
     print lat,long
