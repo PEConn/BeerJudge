@@ -23,7 +23,7 @@ class ABInBev:
                             params={'name': name, 'zone': zone, 'limit': limit},
                             headers=self.authHeader)
 
-        return self.request(doReq).json()
+        return self.request(doReq).text
 
     def getIdealFlavourForFood(self, name):
         doReq = lambda: requests.get('https://api.foodily.com/v1/beerPairings',
@@ -51,5 +51,5 @@ class ABInBev:
 
 if __name__ == "__main__":
     db = ABInBev()
-    print db,getBeerDetails('Budweiser')
+    print db.getBeerDetails('Budweiser')
     print db.getIdealFlavourForFood('chicken')
