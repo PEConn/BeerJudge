@@ -1,7 +1,6 @@
 __author__ = 'michelleyeo'
 from flask import Flask
 import nltk
-import math
 try:
    import cPickle as pickle
 except:
