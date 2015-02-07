@@ -2,7 +2,10 @@ __author__ = 'michelleyeo'
 from flask import Flask
 import nltk
 import TFIDF_thingy
-import itertools
+import numpy.linalg
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.preprocessing import normalize
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 
@@ -40,15 +43,24 @@ def keywords(str, n):
     for word in topWordList:
         query += " "
         query += word[0]
-    
+
     print(query)
 
-def score(name, beerlist, price)
-    return size(beerlist) * price
+def score(food_d, beer_d)
+    food = np.zeros(7)
+    beer = np.zeros(7)
+    for key, val in food_d.items():
+        food[Flavour[key] - 1] = val
 
+    for key, val in beer_d.items():
+        beer[Flavour[key] - 1] = val
 
+    #normalise and dot product
+    score = cosine_similarity(food, beer)
+    return score
 
 ################################
+Flavour = {'green_hoppy' : 1, 'roasted_toasted' : 2, 'citrus_zesty' : 3, 'sour' : 4, 'spicy' : 5, 'fruity' : 6, 'toffee_caramel' : 7}
 TFIDF_thingy.init()
 
 # Get the set of English stopwords from nltk
@@ -63,6 +75,25 @@ tokeniser = RegexpTokenizer(r'\w+')
 testString = "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu"
 keywords(testString, 3)
 #score(name, beerlist, price)
+
+
+# Dictionary of flavour to cardinality retrieved
+food_d={'sour' : 46, 'toffee_caramel' : 2}
+beer_d = {'sour' : 1, 'fruity' : 2, 'spicy' : 1}
+
+food = np.zeros(7)
+beer = np.zeros(7)
+
+for key, val in food_d.items():
+    food[Flavour[key] - 1] = val
+
+for key, val in beer_d.items():
+    beer[Flavour[key] - 1] = val
+
+#normalise and dot product
+score = cosine_similarity(food, beer)
+print(score)
+
 
 
 
