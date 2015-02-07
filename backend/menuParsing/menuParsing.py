@@ -17,7 +17,8 @@ def getRestaurantIDs(latLong,apiID=backupApiID):
     for venue in venues:
         venuesLite.append({})
         for k,v in venue.iteritems():
-            if k in ['name','id']:
+            print k
+            if k in ['name','id','lat','long']:
                 venuesLite[-1][k] = v
     return venuesLite
 
