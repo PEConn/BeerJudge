@@ -1,10 +1,45 @@
-<!doctype html>
-<title>BE-ER DICK</title>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-<div class="page">
-  <h1>BEEEERRR DICK</h1>
-  <div class="metanav">
-      Navigation stuff?
-  </div>
-  {% block body %}{% endblock %}
-</div>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}BE-ER DICK{% endblock %}
+
+{% block navbar %}
+    <nav role="navigation" class="navbar navbar-inverse">
+        <div class="navbar-header">
+            <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+                <span class="sr-only">Toggle Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href=#" class="navbar-brand">Be-er Judge</a>
+        </div>
+        <div id="navbarCollapse" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="/"><a href="#">Home</a></li>
+                <li><a href="beerDetails">Beer Details</a></li>
+                <li><a href="#">"Michelle Smarts"</a></li>
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Messages <b class="caret"></b></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="#">Inbox</a></li>
+                        <li><a href="#">Drafts</a></li>
+                        <li><a href="#">Sent Items</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Trash</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form role="search" class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" placeholder="Search" class="form-control">
+                </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Login</a></li>
+            </ul>
+            
+        </div>
+    </nav>
+{% endblock %}

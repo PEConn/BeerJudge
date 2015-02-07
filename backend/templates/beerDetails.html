@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="jumbotron">
+                    <form>
+                        <div class="form-group">
+                            <label for="inputBeers">Beer Name</Label>
+                            <input type="text" class="form-control" id="inputBeers" placeholder="Beer Name">
+                        </div>
+                        <button id="searchButton" type="button" class="btn btn-primary">Search</button>
+                    </form>
+                    <div id="resultContainer" class="container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block scripts %}
+    {{super()}}
+    <script>
+        $(document).ready(function(){    
+            $('#searchButton').click( function() {
+                $(this).button('loading');
+                searchBeers($('#inputBeers').val());
+            });
+        });
+        function searchBeers(searchString){
+            $.get("beerDetails/"+searchString, function(data){
+                $('#searchButton').button('reset');
+                json = JSON.parse(data);
+                console.log(json);
+                $('#resultContainer').append(json);
+            });
+        }
+    </script>
+    {% endblock %}
+{% endblock %}
