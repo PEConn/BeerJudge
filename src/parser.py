@@ -60,7 +60,10 @@ def getFoodVec(foodCons, foodAcc):
 def getBeerVec(beer_d):
     beer = np.zeros(7)
     for key, val in beer_d.items():
-        beer[Flavour[key] - 1] = val
+        if key in Flavour.keys():
+            beer[Flavour[key] - 1] = val
+        else:
+            continue
     return beer
 
 def score(food, beer):
@@ -80,26 +83,28 @@ stop.extend(["sauce", "side", "served", "english", "french", "italian", "mixed",
 tokeniser = RegexpTokenizer(r'\w+')
 
 #################################
+beerStr = "stella, budweiser"
+beerQueries = tokeniser.tokenize(beerStr)
+beer_d = {}
+for beerQuery in beerQueries:
+    beerDetails = ab.getBeerDetailsAsDict(beerQuery)
+    if len(beerDetails['beers']) > 0:
+        for beer in beerDetails['beers']:
+            if beer['flavorProfile'] not in beer_d.keys():
+                beer_d[beer['flavorProfile']] = 1
+            else:
+                beer_d[beer['flavorProfile']] += 1
+
 info = ("kimchi fried rice", "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu")
 name = info[0]
 str = name + info[1]
 foodQuery = keywords(str, 3)
-beerQuery = "budweiser"
 
-beerDetails = ab.getBeerDetails(beerQuery)
-print(beerDetails)
 foodDetails = ab.getIdealFlavourForFood(foodQuery)
 foodCons = foodDetails[0]
 foodAccs = foodDetails[1]
 
-# Dictionary of flavour to cardinality retrieved
-#foodCons = {'green_hoppy' : 46, 'toffee_caramel' : 2}
-#foodAccs = {'roasted_toasted' : 2}
-beer_d = {'sour' : 1, 'fruity' : 2, 'spicy' : 1}
 food = getFoodVec(foodCons, foodAccs)
 beer = getBeerVec(beer_d)
 res = score(food, beer)
 print(res)
-
-
-
