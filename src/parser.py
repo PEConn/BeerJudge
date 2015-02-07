@@ -18,6 +18,36 @@ def topn(n, list):
     else:
         return list[0:n]
 
+def keywords(str, n):
+    # Tokenise and clean string, remove duplicates
+    str = str.lower()
+    tokenisedString = tokeniser.tokenize(str)
+    filtered_words = [w for w in tokenisedString if not w in stop]
+    uniqueFilteredWords = unique_list(filtered_words)
+
+    # Sort and get top n words
+    wordList = []
+    for word in uniqueFilteredWords:
+        if word in TFIDF_thingy.d:
+            wordList.append((word, TFIDF_thingy.d[word]))
+        else:
+            wordList.append((word, 0))
+    wordList.sort(key=lambda tup: tup[1], reverse=True)
+    topWordList = topn(n, wordList)
+
+    # transform into string and pass to beer API
+    query = ""
+    for word in topWordList:
+        query += " "
+        query += word[0]
+    
+    print(query)
+
+def score(name, beerlist, price)
+    return size(beerlist) * price
+
+
+
 ################################
 TFIDF_thingy.init()
 
@@ -27,33 +57,12 @@ stop.extend(["sauce", "side", "served", "english", "french", "italian", "mixed",
 tokeniser = RegexpTokenizer(r'\w+')
 
 # Tokenise and clean string, remove duplicates
+#name = info[0]
+#str = name + info[1]
+#price = info[2]
 testString = "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu"
-testString = testString.lower()
-tokenisedString = tokeniser.tokenize(testString)
-filtered_words = [w for w in tokenisedString if not w in stop]
-uniqueFilteredWords = unique_list(filtered_words)
-
-# Sort and get top n words
-n = 3
-wordList = []
-for word in uniqueFilteredWords:
-    if word in TFIDF_thingy.d:
-        wordList.append((word, TFIDF_thingy.d[word]))
-    else:
-        wordList.append((word, 0))
-
-wordList.sort(key=lambda tup: tup[1], reverse=True)
-topWordList = topn(n, wordList)
-
-# transform into string and pass to beer API
-query = ""
-for word in topWordList:
-    query += " "
-    query += word[0]
-print(query)
-
-
-
+keywords(testString, 3)
+#score(name, beerlist, price)
 
 
 
