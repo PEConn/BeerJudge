@@ -49,6 +49,7 @@ class ABInBev:
 
         return (cons, accs)
 
-
-db = ABInBev()
-print db.getIdealFlavourForFood('chicken')
+if __name__ == "__main__":
+    db = ABInBev()
+    print db,getBeerDetails('Budweiser')
+    print db.getIdealFlavourForFood('chicken')
