@@ -30,17 +30,31 @@ def getItems(menuList,ignoreStrings=['----'],matchStrings=[''],v=False):
     if type(menuList) != list:
         menuList = [menuList]
     items = []
+    if type(ignoreStrings) != tuple:
+        ignoreStrings = (ignoreStrings,ignoreStrings)
+    if type(matchStrings) != tuple:
+        matchStrings = (matchStrings,matchStrings)
+
     for menu in menuList:
+        if menu['menu_name'] != '':
+            if any(word in menu['menu_name'].lower() for word in ignoreStrings[0]):
+                if v:
+                    print "Skipped : ", menu['menu_name']
+                continue
+            elif not any(word in menu['menu_name'].lower() for word in matchStrings[0]):
+                if v:
+                    print "Skipped : ", menu['menu_name']
+                continue
         if v:
             print "~~~~~~~~~~~~"
-            print menu['menu_name']
+            print "Menu Name:", menu['menu_name']
             print "~~~~~~~~~~~~"
         for s in menu['sections']:
-            if any(word in s['section_name'].lower() for word in ignoreStrings):
+            if any(word in s['section_name'].lower() for word in ignoreStrings[1]):
                 if v:
                     print "Skipped : ", s['section_name']
                 continue
-            elif not any(word in s['section_name'].lower() for word in matchStrings):
+            elif not any(word in s['section_name'].lower() for word in matchStrings[1]):
                 if v:
                     print "Skipped : ", s['section_name']
                 continue
@@ -57,13 +71,17 @@ def getItems(menuList,ignoreStrings=['----'],matchStrings=[''],v=False):
                         items.append((item['name'],item.get('description','')))
     return items
 
+nonFoodIgnores = ['beer','wine','drink','beverage']
+
 def getFoodItems(menulist,v=False):
     # Returns a list of food items in the format [(name0,descriptio0n),(name1,description1)]
-    return getItems(menulist,ignoreStrings=['beer','wine','drink','beverage'],v=v)
+    return getItems(menulist,ignoreStrings=nonFoodIgnores,v=v)
+
+beerMatches = (['beverages','drinks','beer'],['beer'])
 
 def getBeerItems(menulist,v=False,descriptions=False):
     # Returns a list of beer items in the format [(name0,descriptio0n),(name1,description1)]
-    r = getItems(menulist,matchStrings=['beer'],v=v)
+    r = getItems(menulist,matchStrings=beerMatches,v=v)
     if not descriptions:
         r = [i[0] for i in r]
     return r
