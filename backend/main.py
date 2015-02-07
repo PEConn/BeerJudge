@@ -7,7 +7,6 @@ from contextlib import closing
 from flask_bootstrap import Bootstrap
 from menuParsing.menuParsing import *
 
-
 # configuration
 DATABASE = '/tmp/flaskr.db'
 DEBUG = True
@@ -60,6 +59,19 @@ def beerSearch(searchString):
     beers = db.getBeerDetails(searchString)
     print beers
     return beers
+
+@app.route("/get_restaurants", methods=['GET','POST'])
+def getRestaurants():
+
+    lat = request.args.get('lat')
+    long = request.args.get('long')
+    print lat,long
+    print
+    ids = getRestaurantIDs((lat,long))
+    if ids:
+        return json.dumps(ids)
+    else:
+        return json.dumps({'results':None})
 
 if __name__ == "__main__":
     init_db()
