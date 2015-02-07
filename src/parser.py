@@ -44,20 +44,23 @@ def keywords(str, n):
         query += " "
         query += word[0]
 
-    print(query)
+    return query
 
-def score(food_d, beer_d)
+def getFoodVec(food_d):
     food = np.zeros(7)
-    beer = np.zeros(7)
     for key, val in food_d.items():
         food[Flavour[key] - 1] = val
+    return food
 
+def getBeerVec(beer_d):
+    beer = np.zeros(7)
     for key, val in beer_d.items():
         beer[Flavour[key] - 1] = val
+    return beer
 
-    #normalise and dot product
-    score = cosine_similarity(food, beer)
-    return score
+def score(food, beer):
+    out = cosine_similarity(food, beer)
+    return out
 
 ################################
 Flavour = {'green_hoppy' : 1, 'roasted_toasted' : 2, 'citrus_zesty' : 3, 'sour' : 4, 'spicy' : 5, 'fruity' : 6, 'toffee_caramel' : 7}
@@ -73,29 +76,20 @@ tokeniser = RegexpTokenizer(r'\w+')
 #str = name + info[1]
 #price = info[2]
 testString = "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu"
-keywords(testString, 3)
+foodQuery = keywords(testString, 3)
+beerQuery = ""
+
+# Send query, score
 #score(name, beerlist, price)
 
 
 # Dictionary of flavour to cardinality retrieved
-food_d={'sour' : 46, 'toffee_caramel' : 2}
+food_d = {'sour' : 46, 'toffee_caramel' : 2}
 beer_d = {'sour' : 1, 'fruity' : 2, 'spicy' : 1}
-
-food = np.zeros(7)
-beer = np.zeros(7)
-
-for key, val in food_d.items():
-    food[Flavour[key] - 1] = val
-
-for key, val in beer_d.items():
-    beer[Flavour[key] - 1] = val
-
-#normalise and dot product
-score = cosine_similarity(food, beer)
-print(score)
-
-
-
+food = getFoodVec(food_d)
+beer = getBeerVec(beer_d)
+res = score(food, beer)
+print(res)
 
 
 
