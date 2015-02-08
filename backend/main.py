@@ -102,7 +102,7 @@ def choose_restaurant():
     beerItems = getBeerItems(menuList,v=True)
     foodItems = getFoodItems(menuList,v=True)
     menu = []
-    menu.append(' '.join(beerItems))
+    menu.append(','.join(beerItems))
     menu += foodItems
     for i in menu:
         print i

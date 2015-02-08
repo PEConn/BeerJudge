@@ -87,14 +87,15 @@ def start(menu):
     beerStr = menu[0]
     print beerStr
     # beerQueries = tokeniser.tokenize(beerStr)
-    beerQueries = beerStr.split(' ')
-    beerDetails = []
+    beerQueries = beerStr.split(',')
+    beerDetails = {}
     threads = []
 
     def threadAppend(resultList,beerQuery):
         r = getBeerDetailsAsDict(beerQuery)
-        resultList.append(r)
-    beerVecs = []
+        resultList[beerQuery] = r
+
+    beerVecs = {}
     for beerQuery in beerQueries:
         threads.append(threading.Thread(target=threadAppend,args=(beerDetails,beerQuery)))
         threads[-1].start()
@@ -102,9 +103,9 @@ def start(menu):
     for t in threads:
         t.join()
 
-    for beerDetail in beerDetails:
+    for k,beerDetail in beerDetails.iteritems():
         beer_d = {}
-
+        print beerDetail.keys()
         if len(beerDetail['beers']) > 0:
             for beer in beerDetail['beers']:
                 if beer['flavorProfile'] not in beer_d.keys():
@@ -112,7 +113,7 @@ def start(menu):
                 else:
                     beer_d[beer['flavorProfile']] += 1
         beer = getBeerVec(beer_d, Flavour)
-        beerVecs.append(beer)
+        beerVecs[k]=beer
 
     # Get food vector for each food item, and then output result
     allres = []
@@ -128,7 +129,7 @@ def start(menu):
         print time.time()
         name = item[0]
         str = name + item[1]
-        foodQuery = keywords(str, 1, tokeniser, stop)
+        foodQuery = keywords(str, 2, tokeniser, stop)
         threads.append(threading.Thread(target=threadAppend,args=(foodDetails,foodQuery,name)))
         threads[-1].start()
 
@@ -137,16 +138,19 @@ def start(menu):
         t.join()
     pairs = []
     count = 0
-    for beerVec in beerVecs:
+    for k,beerVec in beerVecs.iteritems():
+        print "*%**%*%*%*%*%*%**%*"
 
+        print beerQueries[count], beerVec
+        print "*%**%*%*%*%*%*%**%*"
         maxscore = 0
         for food in foodDetails:
             foodCons = food[0]
             foodAccs = food[1]
             f = getFoodVec(foodCons, foodAccs, Flavour)
             sc = score(f, beerVec)
-            print food[2],f
-            if sc >= maxscore:
+            # print food[2], f, sc
+            if sc > maxscore:
                 maxscore = sc
                 topfood = food[2]
         if maxscore != 0:
@@ -154,7 +158,7 @@ def start(menu):
             maxscore = int(maxscore)/2
             maxscore += 50
             maxscore = '%i'%maxscore+'%'
-            pairs.append([topfood,beerQueries[count],maxscore])
+            pairs.append([topfood,k,maxscore])
         count += 1
 
     #
@@ -182,6 +186,8 @@ def start(menu):
     #     if (len(top) > 0):
     #         topres.append(top[0])
     # return topres
+    pairs.sort(key=lambda tup: tup[2])
+    pairs.reverse()
     return pairs
 #Example:
 #menu = [("stella, budweiser"), ("kimchi fried rice", "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu")]
