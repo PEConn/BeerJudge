@@ -42,7 +42,7 @@ def getIdealFlavourForFood(name):
                         accs[f] += 1
                     else:
                         accs[f] = 1
-
+    print cons,accs
     return (cons, accs)
 
 if __name__ == "__main__":

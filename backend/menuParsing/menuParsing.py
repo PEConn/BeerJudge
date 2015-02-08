@@ -72,7 +72,7 @@ def getItems(menuList,ignoreStrings=['----'],matchStrings=[''],v=False):
                         items.append((item['name'],item.get('description','')))
     return items
 
-nonFoodIgnores = ['beer','wine','drink','beverage']
+nonFoodIgnores = ['beer','wine','drink','beverage','breakfast']
 
 def getFoodItems(menulist,v=False):
     # Returns a list of food items in the format [(name0,descriptio0n),(name1,description1)]

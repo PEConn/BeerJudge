@@ -119,8 +119,8 @@ def start(menu):
     foodDetails = []
     threads = []
 
-    def threadAppend(resultList,foodQuery):
-        r = getIdealFlavourForFood(foodQuery)
+    def threadAppend(resultList,foodQuery,name):
+        r = getIdealFlavourForFood(foodQuery)+(name,)
         resultList.append(r)
 
 
@@ -128,38 +128,57 @@ def start(menu):
         print time.time()
         name = item[0]
         str = name + item[1]
-        foodQuery = keywords(str, 3, tokeniser, stop)
-        threads.append(threading.Thread(target=threadAppend,args=(foodDetails,foodQuery)))
+        foodQuery = keywords(str, 1, tokeniser, stop)
+        threads.append(threading.Thread(target=threadAppend,args=(foodDetails,foodQuery,name)))
         threads[-1].start()
 
-
+    print "YOU MADE %s THREADS"%len(threads)
     for t in threads:
         t.join()
+    pairs = []
+    count = 0
+    for beerVec in beerVecs:
 
-    for food in foodDetails:
-        foodCons = food[0]
-        foodAccs = food[1]
-        f = getFoodVec(foodCons, foodAccs, Flavour)
         maxscore = 0
-        topbeer = beerQueries[0]
-        count = 0
-        for beer in beerVecs:
-            res = score(f, beer)
-            if (res > maxscore):
-                maxscore = res
-                topbeer = beerQueries[count]
-            else:
-                topbeer = beerQueries[count]
-            count += 1
-        allres.append((name,topbeer,maxscore))
+        for food in foodDetails:
+            foodCons = food[0]
+            foodAccs = food[1]
+            f = getFoodVec(foodCons, foodAccs, Flavour)
+            sc = score(f, beerVec)
+            print food[2],f
+            if sc >= maxscore:
+                maxscore = sc
+                topfood = food[2]
+        if maxscore != 0:
+            pairs.append([topfood,beerQueries[count],maxscore])
+        count += 1
 
+    #
+    # for food in foodDetails:
+    #     foodCons = food[0]
+    #     foodAccs = food[1]
+    #     f = getFoodVec(foodCons, foodAccs, Flavour)
+    #     maxscore = 0
+    #     topbeer = beerQueries[0]
+    #     count = 0
+    #     for beer in beerVecs:
+    #         res = score(f, beer)
+    #         if (res > maxscore):
+    #             maxscore = res
+    #             topbeer = beerQueries[count]
+    #         else:
+    #             topbeer = beerQueries[count]
+    #         count += 1
+    #     allres.append((name,topbeer,maxscore))
 
-    topres = []
-    for beer in beerQueries:
-        top = sorted(filter(lambda x: x[1] == beer, allres), key=lambda x: x[2], reverse=True)
-        if (len(top) > 0):
-            topres.append(top[0])
-    return topres
+    #
+    # topres = []
+    # for beer in beerQueries:
+    #     top = sorted(filter(lambda x: x[1] == beer, allres), key=lambda x: x[2], reverse=True)
+    #     if (len(top) > 0):
+    #         topres.append(top[0])
+    # return topres
+    return pairs
 #Example:
 #menu = [("stella, budweiser"), ("kimchi fried rice", "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu")]
 #start(menu)
