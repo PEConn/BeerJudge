@@ -2,7 +2,7 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% import "bootstrap/fixes.html" as fixes %}
 
-{% block title %}BE-ER DICK{% endblock %}
+{% block title %}BE-ER Judge{% endblock %}
 {% block head %}
 {{ super() }}
 <style>#map-container { height:600px }</style>
@@ -24,15 +24,6 @@
                 <li><a href="beerDetails">Beer Details</a></li>
                 <li><a href="restaurantMap">Restaurant Map</a></li>
             </ul>
-            <form role="search" class="navbar-form navbar-left">
-                <div class="form-group">
-                    <input type="text" placeholder="Search" class="form-control">
-                </div>
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Login</a></li>
-            </ul>
-            
         </div>
     </nav>
 {% endblock %}

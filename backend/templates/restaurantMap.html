@@ -14,7 +14,6 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&amp;times;</button>
                     <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                 </div>
                 <div id="modal-bodyy" class="modal-body">
@@ -62,7 +61,7 @@
         });
         
         function searchBeers(lat, lon){
-            $.get("get_restaurants?lat="+lat+"&long="+lon, function(data){
+            $.get("get_restaurants?lat="+lat+"&long="+lon+"&radius=4000", function(data){
                   $('#searchButton').button('reset');
                   json = JSON.parse(data);
                   console.log(json);
@@ -72,6 +71,7 @@
                           position: new google.maps.LatLng(json[i].lat, json[i].long),
                           map: document.var_map,
                           identifer:json[i].id,
+                          icon: 'static/beersmall.png',
                           title:json[i].name});
                   
                   
@@ -81,13 +81,14 @@
                                                     
                           $('#myModalLabel').html(this.title);
                           $.get("choose_restaurant?id="+this.identifer, function(data){
+                                console.log(this.identifer);
                                 json = JSON.parse(data);
-                                console.log(json);
+                                //console.log(json);
                            
                                 
-                                $('#modal-bodyy').html(json);
+                                //$('#modal-bodyy').html(json);
                                 
-                                $('#basicModal').modal();
+                                //$('#basicModal').modal();
                           });
                       });
                   

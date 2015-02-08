@@ -64,7 +64,7 @@ def beerSearch(searchString):
 def restaurantMap():
     return render_template('restaurantMap.html');
 
-@app.route("/get_restaurants", methods=['GET','POST'])
+@app.route("/get_restaurants", methods=['GET'])
 # example http://0.0.0.0:5000/get_restaurants?lat=51.5152855607142&long=-0.111821715082156
 def getRestaurants():
     lat = request.args.get('lat')
