@@ -28,14 +28,14 @@ def wc(str, dict):
             dict[word] = 1
         else:
             dict[word] += 1
-
+d = {}
 def init():
     global d
-    d = {}
-    f = open("../backend/menuParsing/manyMenu.txt", 'r')
-    for line in f:
-        wc(line,d)
-    f.close()
+    if d == {}:
+        f = open("../backend/menuParsing/manyMenu.txt", 'r')
+        for line in f:
+            wc(line,d)
+        f.close()
 
 ################################
 #dict = {}

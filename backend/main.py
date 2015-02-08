@@ -6,7 +6,9 @@ from flask import Flask, request, session, g, redirect, url_for, \
 from contextlib import closing
 from flask_bootstrap import Bootstrap
 from menuParsing.menuParsing import *
-
+import sys
+sys.path.append('../src')
+import parser2
 # configuration
 DATABASE = '/tmp/flaskr.db'
 DEBUG = True
@@ -100,10 +102,18 @@ def choose_restaurant():
     menuList = getMenuList(id)
     beerItems = getBeerItems(menuList,v=True)
     foodItems = getFoodItems(menuList,v=True)
+    menu = []
+    menu.append(' '.join(beerItems))
+    menu += foodItems
+    for i in menu:
+        print i
+    r = parser2.start(menu)
+    print r
+    return json.dumps(r)
     # print printMenu(menuList)
     # Call Michelle's Code
     # return json.dumps(foodItems)
-    return render_template('beerDetails.html')
+    # return render_template('beerDetails.html')
 
 if __name__ == "__main__":
     init_db()

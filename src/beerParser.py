@@ -23,6 +23,7 @@ def topn(n, list):
     else:
         return list[0:n]
 
+
 # This function takes a string and extracts the keywords
 def keywords(str, n, tokeniser, stop):
     # Tokenise and clean string, remove duplicates
@@ -46,7 +47,7 @@ def keywords(str, n, tokeniser, stop):
     for word in topWordList:
         query += " "
         query += word[0]
-    print(query)
+    # print(query)
     return query
 
 def getFoodVec(foodCons, foodAcc, Flavour):
@@ -84,7 +85,9 @@ def start(menu):
 
     # Get the beer vector
     beerStr = menu[0]
-    beerQueries = tokeniser.tokenize(beerStr)
+    print beerStr
+    # beerQueries = tokeniser.tokenize(beerStr)
+    beerQueries = beerStr.split(' ')
     beer_d = {}
     for beerQuery in beerQueries:
         beerDetails = ab.getBeerDetailsAsDict(beerQuery)
@@ -97,6 +100,7 @@ def start(menu):
     beer = getBeerVec(beer_d, Flavour)
 
     # Get food vector for each food item, and then output result
+    allres = []
     for item in menu[1:len(menu)]:
         name = item[0]
         str = name + item[1]
@@ -108,7 +112,8 @@ def start(menu):
 
         food = getFoodVec(foodCons, foodAccs, Flavour)
         res = score(food, beer)
-
+        allres.append(res)
+    return allres
 #Example:
 #menu = [("stella, budweiser"), ("kimchi fried rice", "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu")]
 #start(menu)
