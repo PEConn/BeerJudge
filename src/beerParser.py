@@ -85,11 +85,10 @@ def start(menu):
 
     # Get the beer vector
     beerStr = menu[0]
-    print beerStr
-    # beerQueries = tokeniser.tokenize(beerStr)
     beerQueries = beerStr.split(' ')
-    beer_d = {}
+    beerVecs = []
     for beerQuery in beerQueries:
+        beer_d = {}
         beerDetails = ab.getBeerDetailsAsDict(beerQuery)
         if len(beerDetails['beers']) > 0:
             for beer in beerDetails['beers']:
@@ -97,7 +96,8 @@ def start(menu):
                     beer_d[beer['flavorProfile']] = 1
                 else:
                     beer_d[beer['flavorProfile']] += 1
-    beer = getBeerVec(beer_d, Flavour)
+        beer = getBeerVec(beer_d, Flavour)
+        beerVecs.append(beer)
 
     # Get food vector for each food item, and then output result
     allres = []
@@ -111,9 +111,29 @@ def start(menu):
         foodAccs = foodDetails[1]
 
         food = getFoodVec(foodCons, foodAccs, Flavour)
-        res = score(food, beer)
-        allres.append(res)
-    return allres
+        maxscore = 0
+        topbeer = beerQueries[0]
+        count = 0
+        for beer in beerVecs:
+            res = score(food, beer)
+            if (res > maxscore):
+                maxscore = res
+                topbeer = beerQueries[count]
+            else:
+                topbeer = beerQueries[count]
+            count += 1
+
+        allres.append((name, topbeer, maxscore))
+
+    topres = []
+    for beer in beerQueries:
+        top = sorted(filter(lambda x: x[1] == beer, allres), key=lambda x: x[2], reverse=True)
+        if (len(top) > 0):
+            topres.append(top[0])
+    return topres
+
+
 #Example:
-#menu = [("stella, budweiser"), ("kimchi fried rice", "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu")]
-#start(menu)
+menu = [("stella budweiser"), ("kimchi fried rice", "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu"), ("Chicken", "Ancho-Rubbed Chicken & Chorizo Tacos")]
+out = start(menu)
+print(out)
