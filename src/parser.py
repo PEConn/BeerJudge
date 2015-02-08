@@ -24,7 +24,7 @@ def topn(n, list):
         return list[0:n]
 
 # This function takes a string and extracts the keywords
-def keywords(str, n):
+def keywords(str, n, tokeniser, stop):
     # Tokenise and clean string, remove duplicates
     str = str.lower()
     tokenisedString = tokeniser.tokenize(str)
@@ -49,7 +49,7 @@ def keywords(str, n):
     print(query)
     return query
 
-def getFoodVec(foodCons, foodAcc):
+def getFoodVec(foodCons, foodAcc, Flavour):
     food = np.zeros(7)
     for key, val in foodCons.items():
         food[Flavour[key] - 1] = val
@@ -57,7 +57,7 @@ def getFoodVec(foodCons, foodAcc):
         food[Flavour[key] - 1] = val
     return food
 
-def getBeerVec(beer_d):
+def getBeerVec(beer_d, Flavour):
     beer = np.zeros(7)
     for key, val in beer_d.items():
         if key in Flavour.keys():
@@ -70,41 +70,45 @@ def score(food, beer):
     out = cosine_similarity(food, beer)
     return out[0][0]
 
-################################
-ab = ABInBev()
+# menu is a list of tuples, the first is the string of beers in the menu, the following tuples are menu food entries
+def start(menu):
+    # Initialising and declaring stuff
+    ab = ABInBev()
+    Flavour = {'green_hoppy' : 1, 'roasted_toasted' : 2, 'citrus_zesty' : 3, 'sour' : 4, 'spicy' : 5, 'fruity' : 6, 'toffee_caramel' : 7}
+    TFIDF_thingy.init()
 
-# Initialising and declaring stuff
-Flavour = {'green_hoppy' : 1, 'roasted_toasted' : 2, 'citrus_zesty' : 3, 'sour' : 4, 'spicy' : 5, 'fruity' : 6, 'toffee_caramel' : 7}
-TFIDF_thingy.init()
+    # Get the set of English stopwords from nltk
+    stop = stopwords.words('english')
+    stop.extend(["sauce", "side", "served", "english", "french", "italian", "mixed", "leaves", "baked", "toasted", "fried", "cooked", "spanish", "seasonal", "w"])
+    tokeniser = RegexpTokenizer(r'\w+')
 
-# Get the set of English stopwords from nltk
-stop = stopwords.words('english')
-stop.extend(["sauce", "side", "served", "english", "french", "italian", "mixed", "leaves", "baked", "toasted", "fried", "cooked", "spanish", "seasonal", "w"])
-tokeniser = RegexpTokenizer(r'\w+')
+    # Get the beer vector
+    beerStr = menu[0]
+    beerQueries = tokeniser.tokenize(beerStr)
+    beer_d = {}
+    for beerQuery in beerQueries:
+        beerDetails = ab.getBeerDetailsAsDict(beerQuery)
+        if len(beerDetails['beers']) > 0:
+            for beer in beerDetails['beers']:
+                if beer['flavorProfile'] not in beer_d.keys():
+                    beer_d[beer['flavorProfile']] = 1
+                else:
+                    beer_d[beer['flavorProfile']] += 1
+    beer = getBeerVec(beer_d, Flavour)
 
-#################################
-beerStr = "stella, budweiser"
-beerQueries = tokeniser.tokenize(beerStr)
-beer_d = {}
-for beerQuery in beerQueries:
-    beerDetails = ab.getBeerDetailsAsDict(beerQuery)
-    if len(beerDetails['beers']) > 0:
-        for beer in beerDetails['beers']:
-            if beer['flavorProfile'] not in beer_d.keys():
-                beer_d[beer['flavorProfile']] = 1
-            else:
-                beer_d[beer['flavorProfile']] += 1
+    # Get food vector for each food item, and then output result
+    for item in menu[1:len(menu)]:
+        name = item[0]
+        str = name + item[1]
+        foodQuery = keywords(str, 3, tokeniser, stop)
 
-info = ("kimchi fried rice", "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu")
-name = info[0]
-str = name + info[1]
-foodQuery = keywords(str, 3)
+        foodDetails = ab.getIdealFlavourForFood(foodQuery)
+        foodCons = foodDetails[0]
+        foodAccs = foodDetails[1]
 
-foodDetails = ab.getIdealFlavourForFood(foodQuery)
-foodCons = foodDetails[0]
-foodAccs = foodDetails[1]
+        food = getFoodVec(foodCons, foodAccs, Flavour)
+        res = score(food, beer)
 
-food = getFoodVec(foodCons, foodAccs)
-beer = getBeerVec(beer_d)
-res = score(food, beer)
-print(res)
+#Example:
+#menu = [("stella, budweiser"), ("kimchi fried rice", "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu")]
+#start(menu)
