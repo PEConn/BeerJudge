@@ -86,6 +86,10 @@ def start(menu):
     # Get the beer vector
     beerStr = menu[0]
     print beerStr
+    ABinBevBeers = ['budweiser', 'becks', 'stella', 'leffe', 'hoegaarden']
+    for b in ABinBevBeers:
+        if b not in beerStr:
+            beerStr += ','+b
     # beerQueries = tokeniser.tokenize(beerStr)
     beerQueries = beerStr.split(',')
     beerDetails = {}
@@ -93,9 +97,17 @@ def start(menu):
 
     def threadAppend(resultList,beerQuery):
         r = getBeerDetailsAsDict(beerQuery)
+        print "########"
+        print "########"
+        print "########"
+        print r.keys()
+        print "########"
+        print "########"
+        print "########"
         resultList[beerQuery] = r
 
     beerVecs = {}
+    beerUrls = {}
     for beerQuery in beerQueries:
         threads.append(threading.Thread(target=threadAppend,args=(beerDetails,beerQuery)))
         threads[-1].start()
@@ -106,14 +118,30 @@ def start(menu):
     for k,beerDetail in beerDetails.iteritems():
         beer_d = {}
         print beerDetail.keys()
+        url = ''
         if len(beerDetail['beers']) > 0:
+
             for beer in beerDetail['beers']:
+
                 if beer['flavorProfile'] not in beer_d.keys():
                     beer_d[beer['flavorProfile']] = 1
                 else:
                     beer_d[beer['flavorProfile']] += 1
+                if not url:
+                    url = beer['imageUrl']
+
+        print "########"
+        print "########"
+        print "########"
+        print k,beer_d
+        print "########"
+        print "########"
+        print "########"
+
         beer = getBeerVec(beer_d, Flavour)
+        print beer
         beerVecs[k]=beer
+        beerUrls[k]=url
 
     # Get food vector for each food item, and then output result
     allres = []
@@ -156,9 +184,9 @@ def start(menu):
         if maxscore != 0:
             maxscore *= 100
             maxscore = int(maxscore)/2
-            maxscore += 50
+            maxscore += 40
             maxscore = '%i'%maxscore+'%'
-            pairs.append([topfood,k,maxscore])
+            pairs.append([topfood,k,maxscore,beerUrls[k]])
         count += 1
 
     #

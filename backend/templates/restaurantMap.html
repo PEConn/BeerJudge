@@ -83,12 +83,16 @@
                           $.get("choose_restaurant?id="+this.identifer, function(data){
                                 console.log(this.identifer);
                                 json = JSON.parse(data);
-                                //console.log(json);
-                           
-                                
+                                console.log(json);
+
+                                var html = "";
+                                for(var i=0; i<json.length; i++){
+                                    html += json[i].join() + "<br />";
+                                }
                                 //$('#modal-bodyy').html(json);
+                                $('#modal-bodyy').html(html);
                                 
-                                //$('#basicModal').modal();
+                                $('#basicModal').modal();
                           });
                       });
                   
