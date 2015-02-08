@@ -7,9 +7,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 import sys
-path = sys.path.append("../backend/")
-import beergarage
-from beergarage import ABInBev
+path = sys.path.append("../backend")
+from beergarage import *
+import threading
+import time
 
 ########## Functions ###########
 def unique_list(l):
@@ -74,7 +75,6 @@ def score(food, beer):
 # menu is a list of tuples, the first is the string of beers in the menu, the following tuples are menu food entries
 def start(menu):
     # Initialising and declaring stuff
-    ab = ABInBev()
     Flavour = {'green_hoppy' : 1, 'roasted_toasted' : 2, 'citrus_zesty' : 3, 'sour' : 4, 'spicy' : 5, 'fruity' : 6, 'toffee_caramel' : 7}
     TFIDF_thingy.init()
 
@@ -85,13 +85,28 @@ def start(menu):
 
     # Get the beer vector
     beerStr = menu[0]
+    print beerStr
+    # beerQueries = tokeniser.tokenize(beerStr)
     beerQueries = beerStr.split(' ')
+    beerDetails = []
+    threads = []
+
+    def threadAppend(resultList,beerQuery):
+        r = getBeerDetailsAsDict(beerQuery)
+        resultList.append(r)
     beerVecs = []
     for beerQuery in beerQueries:
+        threads.append(threading.Thread(target=threadAppend,args=(beerDetails,beerQuery)))
+        threads[-1].start()
+
+    for t in threads:
+        t.join()
+
+    for beerDetail in beerDetails:
         beer_d = {}
-        beerDetails = ab.getBeerDetailsAsDict(beerQuery)
-        if len(beerDetails['beers']) > 0:
-            for beer in beerDetails['beers']:
+
+        if len(beerDetail['beers']) > 0:
+            for beer in beerDetail['beers']:
                 if beer['flavorProfile'] not in beer_d.keys():
                     beer_d[beer['flavorProfile']] = 1
                 else:
@@ -101,29 +116,43 @@ def start(menu):
 
     # Get food vector for each food item, and then output result
     allres = []
+    foodDetails = []
+    threads = []
+
+    def threadAppend(resultList,foodQuery):
+        r = getIdealFlavourForFood(foodQuery)
+        resultList.append(r)
+
+
     for item in menu[1:len(menu)]:
+        print time.time()
         name = item[0]
         str = name + item[1]
         foodQuery = keywords(str, 3, tokeniser, stop)
+        threads.append(threading.Thread(target=threadAppend,args=(foodDetails,foodQuery)))
+        threads[-1].start()
 
-        foodDetails = ab.getIdealFlavourForFood(foodQuery)
-        foodCons = foodDetails[0]
-        foodAccs = foodDetails[1]
 
-        food = getFoodVec(foodCons, foodAccs, Flavour)
+    for t in threads:
+        t.join()
+
+    for food in foodDetails:
+        foodCons = food[0]
+        foodAccs = food[1]
+        f = getFoodVec(foodCons, foodAccs, Flavour)
         maxscore = 0
         topbeer = beerQueries[0]
         count = 0
         for beer in beerVecs:
-            res = score(food, beer)
+            res = score(f, beer)
             if (res > maxscore):
                 maxscore = res
                 topbeer = beerQueries[count]
             else:
                 topbeer = beerQueries[count]
             count += 1
+        allres.append((name,topbeer,maxscore))
 
-        allres.append((name, topbeer, maxscore))
 
     topres = []
     for beer in beerQueries:
@@ -131,9 +160,6 @@ def start(menu):
         if (len(top) > 0):
             topres.append(top[0])
     return topres
-
-
 #Example:
-menu = [("stella budweiser"), ("kimchi fried rice", "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu"), ("Chicken", "Ancho-Rubbed Chicken & Chorizo Tacos")]
-out = start(menu)
-print(out)
+#menu = [("stella, budweiser"), ("kimchi fried rice", "Fried kimchi (pickled chinese cabbage) & pork w/ steamed tofu")]
+#start(menu)
