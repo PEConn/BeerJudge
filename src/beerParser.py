@@ -153,7 +153,7 @@ def start(menu):
         resultList.append(r)
 
 
-    for item in menu[1:min(50,len(menu))]:
+    for item in menu[1:min(10,len(menu))]:
         print time.time()
         name = item[0]
         str = name + item[1]
