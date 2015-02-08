@@ -1,12 +1,14 @@
 import sqlite3
 import json
-from beergarage import ABInBev
 from flask import Flask, request, session, g, redirect, url_for, \
              abort, render_template, flash
 from contextlib import closing
 from flask_bootstrap import Bootstrap
 from menuParsing.menuParsing import *
-
+from beergarage import *
+import sys
+sys.path.append('../src')
+import beerParser
 # configuration
 DATABASE = '/tmp/flaskr.db'
 DEBUG = True
@@ -55,8 +57,7 @@ def beerDetails():
 
 @app.route("/beerDetails/<searchString>")
 def beerSearch(searchString):
-    db = ABInBev()
-    beers = db.getBeerDetails(searchString)
+    beers = getBeerDetails(searchString)
     print beers
     return beers
 
@@ -100,10 +101,20 @@ def choose_restaurant():
     menuList = getMenuList(id)
     beerItems = getBeerItems(menuList,v=True)
     foodItems = getFoodItems(menuList,v=True)
+    menu = []
+    menu.append(' '.join(beerItems))
+    menu += foodItems
+    for i in menu:
+        print i
+    r = beerParser.start(menu)
+    # pair = ('becks',(u'Lamb Rogan Josh', u'Tenderly cooked off-the-bone lamb, w/ onion, tomato & pimentos, in a rich, medium sauce'))
+
+
+    return json.dumps(r)
     # print printMenu(menuList)
     # Call Michelle's Code
     # return json.dumps(foodItems)
-    return render_template('beerDetails.html')
+    # return render_template('beerDetails.html')
 
 if __name__ == "__main__":
     init_db()
