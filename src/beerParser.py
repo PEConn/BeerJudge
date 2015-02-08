@@ -86,7 +86,7 @@ def start(menu):
     # Get the beer vector
     beerStr = menu[0]
     print beerStr
-    ABinBevBeers = ['budweiser', 'becks', 'stella', 'leffe', 'hoegaarden']
+    ABinBevBeers = ['Budweiser', 'Becks', 'Stella', 'Leffe', 'Hoegaarden', 'Guiness']
     for b in ABinBevBeers:
         if b not in beerStr:
             beerStr += ','+b
