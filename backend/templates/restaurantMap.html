@@ -87,7 +87,10 @@
 
                                 var html = "";
                                 for(var i=0; i<json.length; i++){
-                                    html += json[i].join() + " <br />";
+									html += json[i][2] + ": ";
+									html += json[i][0] + " <b>with</b> ";
+									html += json[i][1] + "<br />";
+                                    //html += json[i].join() + " <br />";
                                 }
                                 //$('#modal-bodyy').html(json);
                                 $('#modal-bodyy').html(html);
