@@ -150,6 +150,10 @@ def start(menu):
                 maxscore = sc
                 topfood = food[2]
         if maxscore != 0:
+            maxscore *= 100
+            maxscore = int(maxscore)/2
+            maxscore += 50
+            maxscore = '%i'%maxscore+'%'
             pairs.append([topfood,beerQueries[count],maxscore])
         count += 1
 
